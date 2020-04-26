@@ -1,3 +1,10 @@
 {
-    "python.pythonPath": "/home/karthik/.local/share/virtualenvs/speedchallenge-KcNAwj58/bin/python"
+    "python.pythonPath": "/home/karthik/.local/share/virtualenvs/speedchallenge-KcNAwj58/bin/python",
+    "python.jediEnabled": true,
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules/*/**": true,
+        "**/data/**": true
+    }
 }

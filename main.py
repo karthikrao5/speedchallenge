@@ -16,10 +16,10 @@ while(cap.isOpened()):
     ret, frame = cap.read()
     if ret == True:
         
-        edges = cv2.Canny(frame, 100, 200)
+        # edges = cv2.Canny(frame, 20, 200)
 
         # Display the resulting frame
-        cv2.imshow('Frame', edges)
+        cv2.imshow('Frame', frame)
 
         # Press Q on keyboard to  exit
         if cv2.waitKey(25) & 0xFF == ord('q'):
@@ -29,7 +29,7 @@ while(cap.isOpened()):
     else:
         break
 
-# When everything done, release the video capture object
+# When everything done, release the video capture object 
 cap.release()
 
 # Closes all the frames

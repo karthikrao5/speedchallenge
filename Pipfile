@@ -10,6 +10,12 @@ autopep8 = "*"
 [packages]
 numpy = "*"
 opencv-python = "*"
+setuptools = "*"
+cython = "*"
+contextlib2 = "*"
+pillow = "*"
+lxml = "*"
+tensorflow = "*"
 
 [requires]
 python_version = "3.6"
