@@ -18,6 +18,7 @@ from object_detection.utils import ops as utils_ops
 from object_detection.utils import label_map_util
 from object_detection.utils import visualization_utils as vis_util
 
+
 def load_model(model_name):
     base_url = 'http://download.tensorflow.org/models/object_detection/'
     model_file = model_name + '.tar.gz'
@@ -78,10 +79,10 @@ def run_inference_for_single_image(model, image):
     return output_dict
 
 
-def show_inference(model, img_frame):
+def show_inference(model, image_path):
     # the array based representation of the image will be used later in order to prepare the
     # result image with boxes and labels on it.
-    image_np = np.array(img_frame)
+    image_np = np.array(Image.open(image_path))
     # Actual detection.
     output_dict = run_inference_for_single_image(model, image_np)
     # Visualization of the results of a detection.
@@ -94,42 +95,11 @@ def show_inference(model, img_frame):
         instance_masks=output_dict.get('detection_masks_reframed', None),
         use_normalized_coordinates=True,
         line_thickness=8)
-    return image_np
-    # img_cv = cv2.resize(image_np, (200, 200))
-    # cv2.imshow("image", image_np)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+
+    img_cv = cv2.resize(image_np, (200, 200))
+    cv2.imshow("image", image_np)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 
-# Create a VideoCapture object and read from input file
-# If the input is the camera, pass 0 instead of the video file name
-cap = cv2.VideoCapture("data/train.mp4")
-
-# Check if camera opened successfully
-if (cap.isOpened() == False):
-    print("Error opening video stream or file")
-
-# Read until video is completed
-while(cap.isOpened()):
-    # Capture frame-by-frame
-    ret, frame = cap.read()
-    if ret == True:
-        
-        # edges = cv2.Canny(frame, 20, 200)
-
-        # Display the resulting frame
-        cv2.imshow('Frame', show_inference(detection_model, frame))
-
-        # Press Q on keyboard to  exit
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-            break
-
-    # Break the loop
-    else:
-        break
-
-# When everything done, release the video capture object 
-cap.release()
-
-# Closes all the frames
-cv2.destroyAllWindows()
+show_inference(detection_model, "unnamed.jpg")

@@ -16,6 +16,7 @@ contextlib2 = "*"
 pillow = "*"
 lxml = "*"
 tensorflow = "*"
+tensorflow-gpu = "*"
 
 [requires]
 python_version = "3.6"
