@@ -20,10 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1a440574-395e-490f-aa2f-4b7b6aa9dce7" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/googleObjectDetection.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pipfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Pipfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/googleObjectDetection.py" beforeDir="false" afterPath="$PROJECT_DIR$/googleObjectDetection.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +44,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.splitter.proportion" value="0.11645346" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -106,7 +106,12 @@
       <workItem from="1587615861407" duration="50000" />
       <workItem from="1587915598595" duration="21000" />
       <workItem from="1587915627101" duration="5846000" />
-      <workItem from="1587990549573" duration="2576000" />
+      <workItem from="1587990549573" duration="3372000" />
+      <workItem from="1588007231808" duration="1025000" />
+      <workItem from="1588023919460" duration="649000" />
+      <workItem from="1588123891250" duration="15000" />
+      <workItem from="1588123914853" duration="88000" />
+      <workItem from="1588124009941" duration="710000" />
     </task>
     <servers />
   </component>
@@ -134,5 +139,9 @@
       <screen x="1920" y="0" width="2560" height="1440" />
     </state>
     <state x="2983" y="451" width="424" height="493" key="FileChooserDialogImpl/1920.0.2560.1440/0.360.1920.1080@1920.0.2560.1440" timestamp="1587915757810" />
+    <state x="1955" y="34" width="2267" height="1352" key="SettingsEditor" timestamp="1588124027176">
+      <screen x="1920" y="0" width="2560" height="1440" />
+    </state>
+    <state x="1955" y="34" width="2267" height="1352" key="SettingsEditor/1920.0.2560.1440/0.360.1920.1080@1920.0.2560.1440" timestamp="1588124027176" />
   </component>
 </project>
