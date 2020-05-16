@@ -1,5 +1,5 @@
 import cv2
-
+import os 
 import tensorflow as tf
 from tensorflow import keras
 
@@ -46,35 +46,50 @@ print(tf.__version__)
 
 images = []
 
-cap = cv2.VideoCapture("data/train.mp4")
+if (not os.path.exists("trainMp4.npy")):
 
-pos_frame = cap.get(cv2.CAP_PROP_POS_FRAMES)
-while True:
-    flag, frame = cap.read() # get the frame
-    if flag:
-        # The frame is ready and already captured
-        # cv2.imshow('video', frame)
 
-        # store the current frame in as a numpy array
-        images.append(cv2.cvtColor(cv2.resize(frame, (100, 100)) , cv2.COLOR_BGR2GRAY))
+    cap = cv2.VideoCapture("data/train.mp4")
 
-        # pos_frame = cap.get(cv2.cv.CAP_PROP_POS_FRAMES)
-        pos_frame = cap.get(cv2.CAP_PROP_POS_FRAMES)
-    else:
-        # The next frame is not ready, so we try to read it again
-        cap.set(cv2.cv.CAP_PROP_POS_FRAMES, pos_frame-1)
-        print ("frame is not ready")
-        # It is better to wait for a while for the next frame to be ready
-        cv2.waitKey(1000)
+    pos_frame = cap.get(cv2.CAP_PROP_POS_FRAMES)
+    while True:
+        flag, frame = cap.read() # get the frame
+        if flag:
+            # The frame is ready and already captured
+            # cv2.imshow('video', frame)
 
-    if cv2.waitKey(10) == 27:
-        break
-    if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
-        # If the number of captured frames is equal to the total number of frames,
-        # we stop
-        break
+            # store the current frame in as a numpy array
+            image = cv2.cvtColor(cv2.resize(frame, (100, 100)) , cv2.COLOR_BGR2GRAY)
+            images.append(image)
+            # cv2.imshow("Frame", image)
 
-images = np.array(images)
+            # Press Q on keyboard to  exit
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                break
+
+            # pos_frame = cap.get(cv2.cv.CAP_PROP_POS_FRAMES)
+            pos_frame = cap.get(cv2.CAP_PROP_POS_FRAMES)
+        else:
+            # The next frame is not ready, so we try to read it again
+            cap.set(cv2.cv.CAP_PROP_POS_FRAMES, pos_frame-1)
+            print ("frame is not ready")
+            # It is better to wait for a while for the next frame to be ready
+            cv2.waitKey(1000)
+
+        if cv2.waitKey(10) == 27:
+            break
+        if cap.get(cv2.CAP_PROP_POS_FRAMES) == cap.get(cv2.CAP_PROP_FRAME_COUNT):
+            # If the number of captured frames is equal to the total number of frames,
+            # we stop
+            break
+
+    images = np.array(images)
+
+    np.save('trainMp4.npy', images)
+else:
+    images = np.load('trainMp4.npy')
+    
+
 
 print("total images length: %d" % (len(images)))
 
@@ -82,6 +97,9 @@ train_num = int(len(images) * 0.8)
 print ("train set length: %d" % (train_num))
 
 train_images, test_images = images[:train_num,:], images[train_num:,:]
+
+train_images = train_images / 255.0
+test_images = test_images / 255.0
 
 print("train images: %d, test images: %d" % (len(train_images), len(test_images)))
 
@@ -93,23 +111,26 @@ with open('data/train.txt', 'r') as f:
 
 print("label length: %d" % (len(labels)))
 print("train labels length: %d" % (train_num))
+print("Train images shape: %s" % str(train_images.shape))
+
 
 train_labels = labels[:16320]
 test_labels = labels[16320:]
 
+train_labels = np.array(train_labels)
+test_labels = np.array(test_labels)
+
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(100, 100)),
-    keras.layers.Dense(128, activation='relu'),
-    keras.layers.Dense(1)
+    keras.layers.Dense(128, activation='tanh'),
+    keras.layers.Dense(1, activation='linear')
 ])
 
-optimizer = tf.keras.optimizers.RMSprop(0.001)
+model.compile(optimizer=tf.keras.optimizers.SGD(lr=0.01, momentum=0),
+              loss='mean_squared_error',
+              metrics=['accuracy'])
 
-model.compile(optimizer=optimizer,
-              loss='mse',
-              metrics=['mae', 'mse'])
-
-model.fit(train_images, train_labels, epochs=10)
+model.fit(train_images, train_labels, epochs=100)
 
 test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
 
