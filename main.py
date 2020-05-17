@@ -1,5 +1,5 @@
 import cv2
-import os 
+import os
 import tensorflow as tf
 from tensorflow import keras
 
@@ -15,7 +15,6 @@ print(tf.__version__)
 # cap = cv2.VideoCapture("data/train.mp4")
 
 
-
 # # Check if camera opened successfully
 # if not cap.isOpened():
 #     print("Error opening video stream or file")
@@ -25,7 +24,7 @@ print(tf.__version__)
 #     # Capture frame-by-frame
 #     ret, frame = cap.read()
 #     if ret:
-        
+
 #         # edges = cv2.Canny(frame, 20, 200)
 
 #         # Display the resulting frame
@@ -46,20 +45,19 @@ print(tf.__version__)
 
 images = []
 
-if (not os.path.exists("trainMp4.npy")):
-
+if not os.path.exists("trainMp4.npy"):
 
     cap = cv2.VideoCapture("data/train.mp4")
 
     pos_frame = cap.get(cv2.CAP_PROP_POS_FRAMES)
     while True:
-        flag, frame = cap.read() # get the frame
+        flag, frame = cap.read()  # get the frame
         if flag:
             # The frame is ready and already captured
             # cv2.imshow('video', frame)
 
             # store the current frame in as a numpy array
-            image = cv2.cvtColor(cv2.resize(frame, (100, 100)) , cv2.COLOR_BGR2GRAY)
+            image = cv2.cvtColor(cv2.resize(frame, (100, 100)), cv2.COLOR_BGR2GRAY)
             images.append(image)
             # cv2.imshow("Frame", image)
 
@@ -71,8 +69,8 @@ if (not os.path.exists("trainMp4.npy")):
             pos_frame = cap.get(cv2.CAP_PROP_POS_FRAMES)
         else:
             # The next frame is not ready, so we try to read it again
-            cap.set(cv2.cv.CAP_PROP_POS_FRAMES, pos_frame-1)
-            print ("frame is not ready")
+            cap.set(cv2.cv.CAP_PROP_POS_FRAMES, pos_frame - 1)
+            print("frame is not ready")
             # It is better to wait for a while for the next frame to be ready
             cv2.waitKey(1000)
 
@@ -88,15 +86,13 @@ if (not os.path.exists("trainMp4.npy")):
     np.save('trainMp4.npy', images)
 else:
     images = np.load('trainMp4.npy')
-    
-
 
 print("total images length: %d" % (len(images)))
 
 train_num = int(len(images) * 0.8)
-print ("train set length: %d" % (train_num))
+print("train set length: %d" % (train_num))
 
-train_images, test_images = images[:train_num,:], images[train_num:,:]
+train_images, test_images = images[:train_num, :], images[train_num:, :]
 
 train_images = train_images / 255.0
 test_images = test_images / 255.0
@@ -113,7 +109,6 @@ print("label length: %d" % (len(labels)))
 print("train labels length: %d" % (train_num))
 print("Train images shape: %s" % str(train_images.shape))
 
-
 train_labels = labels[:16320]
 test_labels = labels[16320:]
 
@@ -122,9 +117,11 @@ test_labels = np.array(test_labels)
 
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(100, 100)),
-    keras.layers.Dense(128, activation='tanh'),
+    keras.layers.SimpleRNN(128),
     keras.layers.Dense(1, activation='linear')
 ])
+
+model.summary()
 
 model.compile(optimizer=tf.keras.optimizers.SGD(lr=0.01, momentum=0),
               loss='mean_squared_error',
@@ -132,6 +129,6 @@ model.compile(optimizer=tf.keras.optimizers.SGD(lr=0.01, momentum=0),
 
 model.fit(train_images, train_labels, epochs=100)
 
-test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
 
 print('\nTest accuracy:', test_acc)
